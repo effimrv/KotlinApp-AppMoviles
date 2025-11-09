@@ -120,21 +120,6 @@ Mapeo de evidencia a indicadores (resumen)
 - IL2.3 (Persistencia y arquitectura): mostrar Room (DAO/Database) y repository; guardar/leer datos en vivo.
 - IL2.4 (Recursos nativos): mostrar integración de cámara/galería y manejo de permisos.
 
-Checklist final — verificar antes de la defensa
-- [ ] El proyecto abre en Android Studio sin errores de Gradle.
-- [ ] Emulador o dispositivo con API ≥ 26 listo y conectado.
-- [ ] La app compila y arranca correctamente.
-- [ ] Archivos clave abiertos (ver lista arriba).
-- [ ] Tener marcado en el código un punto // TODO para la modificación en vivo.
-- [ ] Git con commits y el repo remoto en GitHub actualizado.
-- [ ] .gitignore incluye: 
-  - /build/
-  - /.gradle/
-  - /local.properties
-  - /.idea/
-  - *.keystore
-- [ ] Licencia (MIT) incluida si aplica.
-
 Consejos prácticos para la demostración
 - Ten los archivos que vas a modificar visibles en pestañas del editor.
 - Antes de la defensa practica la modificación en vivo hasta que la puedas hacer en <2 minutos.
