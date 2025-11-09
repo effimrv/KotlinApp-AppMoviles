@@ -1,135 +1,53 @@
 # KotlinApp-AppMoviles
-LevelUpGamer: demo Android en Kotlin con Compose y persistencia local.
 
-# LevelUpGamer‑Kotlin
+Esqueleto generado para la Evaluación Parcial 3.
 
-Descripción breve
-Aplicación Android desarrollada en Kotlin usando Jetpack Compose y arquitectura MVVM. Esta entrega parcial corresponde a la Evaluación Parcial 3 de la asignatura DSY1105 y debe evidenciar: interfaz funcional, formularios validados, navegación, gestión de estado, persistencia local (Room), acceso a recursos nativos y animaciones.
+Estructura clave creada:
 
-Estado del proyecto
-- Versión: 0.1 — Entrega parcial
-- Min SDK: 26 (Android 8.0)
-- Compile/Target SDK: ajustar a la versión instalada (recomendado 33 o 34)
-- Lenguaje: Kotlin
-- UI: Jetpack Compose (Material 3)
-- Arquitectura: MVVM
-- Repositorio: https://github.com/effimrv/levelupgamer-kotlin
+- `app/src/main/java/com/effimrv/kotlinapp/navigation/NavGraph.kt`
+- `app/src/main/java/com/effimrv/kotlinapp/ui/screens/` (LoginScreen, HomeScreen, FormScreen, DetailScreen)
+- `app/src/main/java/com/effimrv/kotlinapp/ui/components/InputField.kt`
+- `app/src/main/java/com/effimrv/kotlinapp/ui/theme/` (ya existente)
+- `app/src/main/java/com/effimrv/kotlinapp/viewmodel/FormViewModel.kt`
+- `app/src/main/java/com/effimrv/kotlinapp/data/model/Item.kt`
+- `app/src/main/java/com/effimrv/kotlinapp/data/local/ItemDao.kt`
+- `app/src/main/java/com/effimrv/kotlinapp/data/local/AppDatabase.kt`
+- `app/src/main/java/com/effimrv/kotlinapp/data/repository/ItemRepository.kt`
+- `app/src/main/java/com/effimrv/kotlinapp/di/DatabaseModule.kt`
+- `app/src/main/java/com/effimrv/kotlinapp/util/Validation.kt`
 
-Requisitos (previos)
-- Android Studio (última versión estable recomendada)
-- JDK 11+
-- Android SDK (instalar la API que uses como compileSdk)
-- Emulador AVD o dispositivo físico con USB debugging
-- Git configurado (user.name, user.email)
-- Conexión a Internet para descargar dependencias
+Cambios en `app/build.gradle.kts`:
+- Añadidas dependencias mínimas: Navigation Compose, Room (runtime/ktx), Coil, Coroutines.
+- Añadido `id("kotlin-kapt")` (comenté la dependencia `kapt(...)` para evitar errores en el analizador estático; habilitar manualmente si usarás KAPT o migrar a KSP).
 
-Estructura del proyecto
-- app/
-  - src/main/java/com/effimrv/levelupgamer/
-    - ui/
-      - screens/          -> Pantallas (HomeScreen.kt, DetailScreen.kt, etc.)
-      - components/       -> Composables reutilizables (InputField.kt, Avatar.kt)
-      - theme/            -> Theme, colores y tipografías
-      - MainActivity.kt
-    - viewmodel/
-      - MainViewModel.kt
-      - PlayerViewModel.kt
-    - data/
-      - model/            -> Entidades y DTOs (Player.kt)
-      - local/
-        - db/             -> AppDatabase.kt
-        - dao/            -> PlayerDao.kt
-      - repository/       -> PlayerRepository.kt
-    - nav/
-      - NavGraph.kt       -> NavHost y rutas
-  - res/                 -> recursos (drawables, strings, layouts XML mínimos)
-  - AndroidManifest.xml
-- build.gradle.kts (project root)
-- app/build.gradle.kts (module: app)
-- settings.gradle.kts
-- gradle/libs.versions.toml (version catalog, opcional)
-- README.md
-- LICENSE (MIT)
-- .gitignore
+Cómo compilar localmente (Windows cmd.exe):
 
+1. Abrir `Android Studio` y sincronizar Gradle (o desde el proyecto ejecutar):
 
-Contenido esencial de app/build.gradle.kts (ejemplo mínimo)
-```kotlin
-plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-}
+   gradlew.bat --version
 
-android {
-    namespace = "com.effimrv.levelupgamerkotlin"
-    compileSdk = 33
+2. Para compilar el APK de debug desde la terminal (en la raíz del proyecto):
 
-    defaultConfig {
-        applicationId = "com.effimrv.levelupgamerkotlin"
-        minSdk = 26
-        targetSdk = 33
-        versionCode = 1
-        versionName = "0.1"
-    }
+   .\gradlew.bat assembleDebug
 
-    buildFeatures { compose = true }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.get()
-    }
-    kotlinOptions { jvmTarget = "1.8" }
-}
-dependencies {
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.compose.ui:ui:1.5.0")
-    implementation("androidx.compose.material:material:1.5.0")
-    implementation("androidx.room:room-runtime:2.5.2")
-    kapt("androidx.room:room-compiler:2.5.2")
-    // ... otras dependencias
-}
-```
+Notas y siguientes pasos recomendados:
 
-Cómo ejecutar el proyecto (pasos)
-1. Clonar:
-```bash
-git clone https://github.com/effimrv/levelupgamer-kotlin.git
-cd levelupgamer-kotlin
-```
-2. Abrir en Android Studio: File → Open → seleccionar la carpeta del proyecto.
-3. Si Android Studio pide instalar compileSdk: abrir SDK Manager e instalar la API indicada.
-4. Sync Project with Gradle Files.
-5. Crear AVD (Tools → AVD Manager) con API ≥ 26 o conectar dispositivo.
-6. Run → Run 'app' → seleccionar AVD/dispositivo.
+- Si vas a usar Room y quieres procesado de anotaciones, habilita KAPT en `app/build.gradle.kts` y añade la dependencia del compilador de Room (o instala y usa KSP):
+  - Con KAPT: descomentar `kapt("androidx.room:room-compiler:2.8.3")` y asegurarte de tener `id("kotlin-kapt")` activo.
+  - Con KSP: agregar plugin KSP y la dependencia `ksp("androidx.room:room-compiler:2.8.3")`.
+- Ajusta versiones de bibliotecas si usas un `version catalog` en `gradle/libs.versions.toml` (hay aliases ya en uso en el proyecto).
+- Implementa la lógica de persistencia en `ItemRepository` y conecta `FormViewModel` con la base de datos.
 
-Comandos Git útiles
-```bash
-# Inicializar (si no hay repo local)
-git init
-git add .
-git commit -m "Initial commit: skeleton and README"
-git branch -M main
-git remote add origin https://github.com/effimrv/levelupgamer-kotlin.git
-git push -u origin main
-```
+Si quieres, ahora puedo:
+- Activar KAPT/KSP y añadir la dependencia del compilador de Room (recomiendo KSP).
+- Implementar un ejemplo CRUD completo conectado a la UI.
+- Añadir permisos de cámara/galería y ejemplo de carga de imagen con Coil.
 
-Mapeo de evidencia a indicadores (resumen)
-- IL2.1 (Diseño de interfaces y formularios): mostrar PlayerForm.kt + demo con entradas inválidas.
-- IL2.2 (Lógica y estado): mostrar ViewModel, explicar StateFlow y modificar componente en vivo.
-- IL2.3 (Persistencia y arquitectura): mostrar Room (DAO/Database) y repository; guardar/leer datos en vivo.
-- IL2.4 (Recursos nativos): mostrar integración de cámara/galería y manejo de permisos.
+Commit sugerido (ejemplo):
 
-Consejos prácticos para la demostración
-- Ten los archivos que vas a modificar visibles en pestañas del editor.
-- Antes de la defensa practica la modificación en vivo hasta que la puedas hacer en <2 minutos.
-- Si algo falla, explica brevemente la intención, el error y el plan para corregirlo; evita perder más de 1 minuto intentando arreglar un fallo crítico.
-- No necesitarás material de apoyo adicional; la defensa es práctica y técnica.
+git add -A
+git commit -m "feat: esqueleto inicial para evaluación (UI, navigation, Room skeleton, ViewModel)"
 
-(Para API 33+ usar READ_MEDIA_IMAGES y manejar permisos en runtime.)
+---
 
-Contacto / Autor
-- effimrv — https://github.com/effimrv
-
-Licencia
-- MIT — incluir archivo LICENSE en la raíz del repositorio.
+Si quieres que continúe y ejecute la compilación ahora, lo hago y te muestro la salida (puede tardar varios minutos).
