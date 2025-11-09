@@ -1,0 +1,87 @@
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String
+  name          String
+  birthdate     DateTime
+  role          String   @default("user")
+  pointsBalance Int      @default(0)
+  referredBy    String?
+  verified      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Orders        Order[]
+  Reviews       Review[]
+  Points        PointsTransaction[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  sku         String   @unique
+  name        String
+  description String?
+  priceCents  Int
+  stock       Int      @default(0)
+  images      Json?
+  variants    Json?
+  attributes  Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Reviews     Review[]
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  parentId  String?
+}
+
+model Order {
+  id             String   @id @default(uuid())
+  userId         String
+  items          Json
+  totalCents     Int
+  paymentStatus  String
+  orderStatus    String
+  pointsAwarded  Int     @default(0)
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  productId String
+  rating    Int
+  title     String?
+  body      String?
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model PointsTransaction {
+  id             String   @id @default(uuid())
+  userId         String
+  type           String
+  points         Int
+  reason         String?
+  relatedOrderId String?
+  createdAt      DateTime @default(now())
+  expiresAt      DateTime?
+  user           User     @relation(fields: [userId], references: [id])
+}
+// Prisma schema for Level-Up Gamer (MVP subset)
+
+datasource db {
+

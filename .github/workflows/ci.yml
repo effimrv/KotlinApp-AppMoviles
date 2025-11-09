@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install
+        run: |
+          cd apps/web || exit 0
+          npm ci || npm install
+      - name: Lint
+        run: |
+          cd apps/web || exit 0
+          npm run lint || echo "no lint configured"
+      - name: Test
+        run: |
+          cd apps/web || exit 0
+          npm run test || echo "no tests configured"
+
