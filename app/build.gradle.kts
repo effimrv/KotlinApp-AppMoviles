@@ -61,7 +61,7 @@ dependencies {
     implementation("androidx.room:room-ktx:2.8.3")
     // Annotation processor for Room. Use KSP (recommended) or KAPT.
     // If you want to enable KAPT, uncomment the following line and ensure the plugin is applied:
-    // kapt("androidx.room:room-compiler:2.8.3")
+    kapt("androidx.room:room-compiler:2.8.3")
     // Or migrate to KSP and add: ksp("androidx.room:room-compiler:2.8.3")
 
     // Coil for image loading
