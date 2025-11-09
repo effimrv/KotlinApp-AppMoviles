@@ -1,24 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '../../../../packages/db/src/prisma'
+import { prisma } from '../../../../../packages/db/src/prisma'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { validateEmail, calculateAge } from '../../../lib/validation'
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'dev_secret_change'
-
-function validateEmail(email: string) {
-  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
-}
-
-function calculateAge(birthdate: string) {
-  const bd = new Date(birthdate)
-  const now = new Date()
-  let age = now.getFullYear() - bd.getFullYear()
-  const m = now.getMonth() - bd.getMonth()
-  if (m < 0 || (m === 0 && now.getDate() < bd.getDate())) {
-    age--
-  }
-  return age
-}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
@@ -84,4 +70,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: 'Server error' })
   }
 }
-

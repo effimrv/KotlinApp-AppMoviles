@@ -5,7 +5,8 @@
   "scripts": {
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "seed": "node prisma\\seed.js"
   },
   "devDependencies": {
     "prisma": "5.12.0"
@@ -14,4 +15,3 @@
     "@prisma/client": "5.12.0"
   }
 }
-

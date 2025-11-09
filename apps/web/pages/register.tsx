@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { validateEmail, calculateAge } from '../lib/validation'
 
 type FormState = {
   name: string
@@ -9,16 +10,6 @@ type FormState = {
   country: string
   accept_tos: boolean
   code_referido?: string
-}
-
-const validateEmail = (email: string) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
-const calculateAge = (birthdate: string) => {
-  const bd = new Date(birthdate)
-  const now = new Date()
-  let age = now.getFullYear() - bd.getFullYear()
-  const m = now.getMonth() - bd.getMonth()
-  if (m < 0 || (m === 0 && now.getDate() < bd.getDate())) age--
-  return age
 }
 
 export default function RegisterPage() {
@@ -159,4 +150,3 @@ export default function RegisterPage() {
     </main>
   )
 }
-
