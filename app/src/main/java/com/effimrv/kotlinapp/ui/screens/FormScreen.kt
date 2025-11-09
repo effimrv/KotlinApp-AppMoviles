@@ -10,14 +10,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.effimrv.kotlinapp.viewmodel.ItemViewModel
+import com.effimrv.kotlinapp.viewmodel.ItemViewModelFactory
 import androidx.compose.material3.MaterialTheme
 
 @Composable
 fun FormScreen(navController: NavController) {
     val application = LocalContext.current.applicationContext as Application
-    val viewModel = remember { ItemViewModel(application) }
+    val factory = remember { ItemViewModelFactory(application) }
+    val viewModel: ItemViewModel = viewModel(factory = factory)
 
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }

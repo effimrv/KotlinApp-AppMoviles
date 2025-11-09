@@ -51,3 +51,43 @@ git commit -m "feat: esqueleto inicial para evaluación (UI, navigation, Room sk
 ---
 
 Si quieres que continúe y ejecute la compilación ahora, lo hago y te muestro la salida (puede tardar varios minutos).
+
+## Guion de demostración (15 minutos)
+
+1. Preparación y ejecución (0:00–1:00)
+   - Abrir el proyecto en Android Studio.
+   - Ejecutar la app en un emulador o dispositivo (Run > App).
+
+2. Estructura del proyecto (1:00–3:30)
+   - Mostrar `MainActivity.kt`, `navigation/NavGraph.kt`, paquetes `ui/`, `viewmodel/`, `data/`.
+   - Explicar MVVM: UI -> ViewModel -> Repository -> Room.
+
+3. Diseño y navegación (3:30–6:00)
+   - Navegar por Login -> Home -> Form -> Detail.
+   - Explicar decisiones de Material3 y componentes reutilizables.
+
+4. Formularios y validación (6:00–8:30)
+   - Abrir `FormScreen.kt` y demostrar validación de `title` y feedback visual.
+
+5. Estado y persistencia (8:30–11:00)
+   - Crear un item en `FormScreen`, volver a `Home` y mostrar que la lista se actualiza.
+   - Abrir `DetailScreen` para mostrar detalle del item.
+
+6. Recursos nativos y animaciones (11:00–13:30)
+   - Usar `ImagePicker` desde `Home` -> seleccionar imagen y mostrar con Coil.
+   - Mostrar la animación del loader en `Home`.
+
+7. Cambios en vivo (13:30–14:30)
+   - Agregar una validación adicional o un campo (ejemplos en README) y compilar.
+
+8. Cierre (14:30–15:00)
+   - Resumen y preguntas.
+
+## Comandos útiles
+
+```cmd
+cd C:\Users\PC01\AndroidStudioProjects\KotlinApp-AppMoviles
+.\gradlew.bat clean assembleDebug
+.\gradlew.bat installDebug
+adb logcat
+```

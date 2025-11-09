@@ -1,6 +1,8 @@
 package com.effimrv.kotlinapp.ui.screens
 
-import android.app.Application
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,14 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.effimrv.kotlinapp.data.model.Item
 import com.effimrv.kotlinapp.viewmodel.ItemViewModel
+import com.effimrv.kotlinapp.viewmodel.ItemViewModelFactory
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    val application = LocalContext.current.applicationContext as Application
-    val viewModel = remember { ItemViewModel(application) }
+    val application = LocalContext.current.applicationContext as android.app.Application
+    val factory = remember { ItemViewModelFactory(application) }
+    val viewModel: ItemViewModel = viewModel(factory = factory)
 
     val items by viewModel.items.collectAsState(initial = emptyList())
     val loading by viewModel.loading.collectAsState(initial = false)
@@ -39,20 +44,30 @@ fun HomeScreen(navController: NavController) {
             Text("Seleccionar imagen")
         }
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(onClick = { navController.navigate("camera") }, modifier = Modifier.fillMaxWidth()) {
+            Text("Abrir cámara")
+        }
+
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (loading) {
+        AnimatedVisibility(visible = loading, enter = fadeIn(), exit = fadeOut()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
-        } else {
+        }
+
+        if (!loading) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(items) { item: Item ->
                     Row(modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)) {
                         Text(item.title, modifier = Modifier.weight(1f).clickable { navController.navigate("detail/${item.id}") })
-                        Text("Eliminar", modifier = Modifier.clickable { viewModel.delete(item) })
+                        Text("Eliminar", modifier = Modifier.clickable {
+                            viewModel.delete(item)
+                        })
                     }
                 }
             }

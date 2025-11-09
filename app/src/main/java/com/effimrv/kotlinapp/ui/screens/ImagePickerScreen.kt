@@ -1,9 +1,9 @@
 package com.effimrv.kotlinapp.ui.screens
 
-import android.content.Intent
 import android.net.Uri
-import android.provider.Settings
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -21,21 +21,18 @@ fun ImagePickerScreen(navController: NavController) {
     val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
-    // Launcher para seleccionar imagen
-    val pickLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+    // Modern Photo Picker (no necesita permisos en la mayoría de casos)
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
         imageUri = uri
     }
 
-    // Permiso para leer imágenes (Android 13+ usa READ_MEDIA_IMAGES). Usamos una única request por simplicidad.
-    val permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
-
-    var hasPermission by remember { mutableStateOf(true) }
-
-    val permLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        hasPermission = granted
-        if (granted) {
-            pickLauncher.launch("image/*")
-        }
+    // Fallback: GetContent (en caso que quieras compatibilidad explícita)
+    val getContentLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
     }
 
     Column(
@@ -46,25 +43,22 @@ fun ImagePickerScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = {
-            // Pedir permiso y luego abrir selector
-            permLauncher.launch(permission)
+            // Usar PickVisualMedia si está disponible
+            try {
+                photoPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            } catch (e: Exception) {
+                // Fallback a GetContent
+                getContentLauncher.launch("image/*")
+            }
         }, modifier = Modifier.fillMaxWidth()) {
-            Text("Seleccionar imagen desde galería")
+            Text("Seleccionar imagen (Photo Picker)")
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (!hasPermission) {
-            Text("Permiso denegado. Habilítalo en ajustes para seleccionar imágenes.")
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", context.packageName, null)
-                }
-                context.startActivity(intent)
-            }) {
-                Text("Abrir ajustes")
-            }
+        // También proveemos un botón de fallback explícito
+        Button(onClick = { getContentLauncher.launch("image/*") }, modifier = Modifier.fillMaxWidth()) {
+            Text("Seleccionar imagen (Galería - fallback)")
         }
 
         Spacer(modifier = Modifier.height(12.dp))

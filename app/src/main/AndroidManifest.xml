@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Permisos para acceso a imágenes/almacenamiento -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!-- Android 13+ permiso granular para imágenes -->
+    <!-- Permisos para acceso a imágenes/almacenamiento (Android 13+ usar READ_MEDIA_IMAGES) -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!-- Permiso para cámara -->
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"

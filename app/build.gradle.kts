@@ -67,6 +67,8 @@ dependencies {
     // Coil for image loading
     implementation("io.coil-kt:coil-compose:2.7.0")
 
+    // NOTE: CameraX dependencies removed (using TakePicturePreview contract instead)
+
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
